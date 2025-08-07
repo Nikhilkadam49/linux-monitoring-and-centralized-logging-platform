@@ -1,0 +1,34 @@
+sample log output:
+ 
+sudo logwatch --detail high --range today --service all > ~/logwatch-report.txt
+cat ~/logwatch-report.txt
+
+
+Create a Daily Cron Job:
+
+sudo crontab -e
+
+0 0 * * * /usr/sbin/logwatch --detail high --range yesterday --service all > /var/log/logwatch/daily-$(date +\%F).log 2>&1
+
+This runs Logwatch every day at midnight and stores reports in /var/log/logwatch/.
+
+
+Create the Log Directory:
+
+sudo mkdir -p /var/log/logwatch
+sudo chmod 755 /var/log/logwatch
+
+
+Run it manually once to see the output: 
+
+sudo /usr/sbin/logwatch --detail high --range yesterday --service all > /var/log/logwatch/manual-$(date +%F).log
+
+Then check the report:
+
+cat /var/log/logwatch/manual-$(date +%F).log
+
+
+
+
+
+

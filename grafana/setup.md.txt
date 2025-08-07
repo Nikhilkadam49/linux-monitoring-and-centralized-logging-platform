@@ -1,0 +1,93 @@
+Install Grafana:
+
+sudo apt-get install -y software-properties-common
+sudo add-apt-repository "deb https://packages.grafana.com/oss/deb stable main"
+wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
+sudo apt-get update
+sudo apt-get install grafana -y
+
+
+Start and enable Grafana:
+
+sudo systemctl daemon-reexec
+sudo systemctl enable grafana-server
+sudo systemctl start grafana-server
+
+
+Access Grafana UI:
+
+http://<your-ec2-public-ip>:3000
+
+
+Step 4: Add Prometheus as Data Source
+
+
+In Grafana UI:
+
+
+
+Go to Gear Icon - Data Sources
+
+
+
+Click Add data source
+
+
+
+Select Prometheus
+
+
+
+Set URL to:
+
+
+
+
+http://localhost:9090
+
+
+Click Save & Test
+
+
+
+ Should show “Data source is working”
+
+
+
+Step 1: 
+
+Import Dashboard
+
+
+In Grafana:
+
+
+
+Click the “+” icon ? Import
+
+
+
+In “Import via Grafana.com”, enter this dashboard ID:
+
+
+
+
+1860
+
+
+This is the popular:
+
+Node Exporter Full by ricardo_felix
+
+
+
+Click Load
+
+
+
+For “Prometheus” data source, choose the Prometheus instance you just added
+
+
+
+Click Import
+

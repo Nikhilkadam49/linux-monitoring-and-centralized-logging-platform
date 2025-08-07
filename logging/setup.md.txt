@@ -1,0 +1,41 @@
+step 1: Install Rsyslog ( should be pre-installed )
+
+ sudo apt update
+ sudo apt install rsyslog -y
+
+check status
+
+ sudo systemctl status rsyslog
+
+It should say “active (running)”.
+
+
+step 2: Install Logrotate (usually preinstalled)
+
+ sudo apt install logrotate -y
+
+let’s say we want to rotate logs in /var/log/syslog daily and keep 7 copies:
+
+ sudo nano /etc/logrotate.d/custom-syslog
+
+           /var/log/syslog {
+    daily
+    missingok
+    rotate 7
+    compress
+    delaycompress
+    notifempty
+    create 0640 syslog adm
+    sharedscripts
+    postrotate
+        /usr/lib/rsyslog/rsyslog-rotate
+    endscript
+}
+
+Test 
+  sudo logrotate -f /etc/logrotate.d/custom-syslog
+
+
+step 3 : Install Logwatch
+
+  sudo apt install logwatch -y

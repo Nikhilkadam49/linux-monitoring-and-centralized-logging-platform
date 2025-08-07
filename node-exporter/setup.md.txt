@@ -1,0 +1,104 @@
+Download Node Exporter:
+
+cd /tmp
+curl -LO https://github.com/prometheus/node_exporter/releases/download/v1.8.1/node_exporter-1.8.1.linux-amd64.tar.gz
+tar xvf node_exporter-1.8.1.linux-amd64.tar.gz
+cd node_exporter-1.8.1.linux-amd64
+
+
+Move the binary:
+
+sudo cp node_exporter /usr/local/bin/
+
+Create systemd service:
+
+sudo nano /etc/systemd/system/node_exporter.service
+
+[Unit]
+Description=Node Exporter
+After=network.target
+
+[Service]
+User=nobody
+ExecStart=/usr/local/bin/node_exporter
+
+[Install]
+WantedBy=default.target
+
+
+Start and enable service:
+
+sudo systemctl daemon-reload
+sudo systemctl enable node_exporter
+sudo systemctl start node_exporter
+
+
+Test in browser:
+
+http://<your-ec2-public-ip>:9100/metrics
+
+
+Step 2: Configure Prometheus to Scrape Node Exporter :
+
+
+Open the Prometheus config file:
+
+sudo nano /etc/prometheus/prometheus.yml
+
+Scroll to the bottom and add this scrape job:
+
+  - job_name: 'node_exporter'
+    static_configs:
+      - targets: ['localhost:9100']
+
+sudo systemctl restart prometheus
+
+
+Step 3: Verify Scraping
+
+
+Go to Prometheus UI : 
+
+
+http://<your-ec2-ip>:9090
+
+
+
+Click on “Status” ? “Targets”
+
+
+URL: http://<your-ec2-ip>:9090/targets
+
+
+
+You should see:
+
+
+
+Job: node_exporter
+
+
+
+Target: localhost:9100
+
+
+
+Status: UP
+
+
+
+That means Prometheus is successfully scraping your server's system metrics!
+
+
+Step 4: Try a Query
+
+
+In the Prometheus UI, try querying:
+
+
+
+
+node_cpu_seconds_total
+
+
+You should see real-time CPU usage broken down by mode (idle, user, system, etc.)
